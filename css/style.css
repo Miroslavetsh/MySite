@@ -138,6 +138,10 @@ input:focus:-ms-input-placeholder {
   font-style: normal;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 body._fixed {
   overflow: hidden;
 }

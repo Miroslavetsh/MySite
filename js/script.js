@@ -9,20 +9,8 @@ function testWebP(callback) {
 	webP.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
 };
 
-const MOBILE_WIDTH = 756
 
-class Element {
-    getOffset() {
-        let rect = this.header.getBoundingClientRect(),
-            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-            scrollTop = window.pageYOffset || document.documentElement.scrollTop
-
-        return { 
-            top: rect.top + scrollTop, 
-            left: rect.left + scrollLeft 
-        }
-    }
-}
+// Classes of components
 
 class Header {
 
@@ -129,9 +117,15 @@ class Navigation {
     }
 }
 
+
+// main components 
+
 const headerObj = new Header
 const burgerObj = new Burger
 const navigationObj = new Navigation
+
+
+// The main function that allow us to create all of the components
 
 function render() {
     document.addEventListener('DOMContentLoaded', () => {
@@ -139,27 +133,28 @@ function render() {
         wrapper.insertAdjacentHTML('afterbegin', headerObj.create())
         headerObj.setHeader()
 
-        if(MOBILE_WIDTH) {
-            const header__inner = document.querySelector('.header__inner')
-            header__inner.insertAdjacentHTML('afterbegin', burgerObj.create())
-            header__inner.insertAdjacentHTML('beforeend', navigationObj.create())
-
-            navigationObj.setNavigation()
-
-            navigationObj.isActive = function() {
-                return navigation.classList.contains('_active')
-            }
-
-            burgerObj.setBurger()
-
-            burgerObj.isActive = function() {
-                return burger.classList.contains('_active')
-            }
-
-            burgerhandler()
+        // Init the navigation
+        const header__inner = document.querySelector('.header__inner')
+        header__inner.insertAdjacentHTML('beforeend', navigationObj.create())
+        navigationObj.setNavigation()
+        // Added new method that show us a state
+        navigationObj.isActive = function() {
+            return navigation.classList.contains('_active')
         }
+
+        //  Init the burger
+        header__inner.insertAdjacentHTML('afterbegin', burgerObj.create())
+        burgerObj.setBurger()
+        burgerObj.isActive = function() {
+            return burger.classList.contains('_active')
+        }
+
+        burgerhandler()
     })
 }
+
+
+// Listeners (scroll, click, etc) 
 
 function listenToScroll() {
     document.addEventListener('scroll', () => {
@@ -191,6 +186,9 @@ function listenToScroll() {
     })
 }
 
+
+// Handlers for coomponents
+
 function burgerhandler() {
     const body = document.querySelector('body')
 
@@ -207,8 +205,14 @@ function burgerhandler() {
     })
 }
 
+
+// Initiate our application
+
 render()
 listenToScroll()
+
+
+// Main functions to work with defaults parameters 
 
 function getBodyScrollTop() {
     return self.pageYOffset || (document.documentElement && document.documentElement.scrollTop) || (document.body && document.body.scrollTop)
