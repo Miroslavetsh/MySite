@@ -717,7 +717,6 @@ body::-webkit-scrollbar-thumb {
   margin-bottom: 20px;
   font-size: 18px;
   font-family: 'NeoSansPro-Medium';
-  color: 1.8em;
   color: #fff;
   text-transform: uppercase;
 }
