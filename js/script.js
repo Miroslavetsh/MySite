@@ -1,20 +1,50 @@
-// WEBP format 
-
-function testWebP(callback) {
-
-	var webP = new Image()
-	webP.onload = webP.onerror = function () {
-		callback(webP.height == 2)
-	}
-	webP.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
-};
-
-
 // Classes of components
 
-class Header {
+class Component {
+    constructor(elementName) {
+        this.html
+        this.selector = `#${elementName}`
+        this.component
+    }
 
-    constructor () {
+    setComponent() {
+        this.component = document.querySelector(this.selector)
+    }
+
+    // get component() {
+    //     return this.component
+    // }
+
+    create() {
+        return this.html
+    }
+
+
+    activate() {
+        this.component.classList.add('_active')
+    }
+
+    disactivate() {
+        this.component.classList.remove('_active')
+    }
+
+    isActive() {
+        return this.component.classList.contains('_active')
+    }
+
+    fixate() {
+        this.component.classList.add('_fixed')
+    }
+
+    unfix() {
+        this.component.classList.remove('_fixed')
+    }
+}
+
+class Header extends Component {
+
+    constructor (elementName) {
+        super(elementName)
         this.html = `
             <header class="header" id="header">
                 <div class="container">
@@ -29,64 +59,28 @@ class Header {
                 </div>
             </header>
         `
-        this.header
         this.ANIMATION_DURATION = 200
     }
-    
-    setHeader() {
-        this.header = document.querySelector('#header')
-    }
 
-    create() {
-        return this.html
-    }
-
-    getHeader() {
-        return this.header
-    }
-
-    fixate() {
-        this.header.classList.add('_fixed')
-    }
-
-    unfix() {
-        this.header.classList.remove('_fixed')
-    }
-    
     animate(options) {
-        this.header.animate(options, this.ANIMATION_DURATION)
+        this.component.animate(options, this.ANIMATION_DURATION)
     }
 }
 
-class Burger {
-    constructor() {
+class Burger extends Component {
+    constructor(elementName) {
+        super(elementName)
         this.html = `
             <div class="header__burger burger" id="burger">
                 <span></span>
             </div>
         `
-        this.burger
-    }
-    
-    create() {
-        return this.html
-    }
-
-    setBurger() {
-        this.burger = document.querySelector('#burger')
-    }
-
-    activate() {
-        this.burger.classList.add('_active')
-    }
-
-    disactivate() {
-        this.burger.classList.remove('_active')
     }
 }
 
-class Navigation {
-    constructor() {
+class Navigation extends Component {
+    constructor(elementName) {
+        super(elementName)
         this.html = `
             <nav class="header__nav nav" id="nav">
                 <ul class="nav__wrapper">
@@ -97,32 +91,15 @@ class Navigation {
                 </ul>
             </nav>
         `
-        this.navigation
-    }
-
-    setNavigation() {
-        this.navigation = document.querySelector('#nav') 
-    }
-
-    create() {
-        return this.html
-    }
-
-    activate() {
-        this.navigation.classList.add('_active')
-    }
-
-    disactivate() {
-        this.navigation.classList.remove('_active')
     }
 }
 
 
 // main components 
 
-const headerObj = new Header
-const burgerObj = new Burger
-const navigationObj = new Navigation
+const headerObj = new Header('header')
+const burgerObj = new Burger('burger')
+const navigationObj = new Navigation('nav')
 
 
 // The main function that allow us to create all of the components
@@ -131,12 +108,12 @@ function render() {
     document.addEventListener('DOMContentLoaded', () => {
         const wrapper = document.querySelector('#page')
         wrapper.insertAdjacentHTML('afterbegin', headerObj.create())
-        headerObj.setHeader()
+        headerObj.setComponent()
 
         // Init the navigation
         const header__inner = document.querySelector('.header__inner')
         header__inner.insertAdjacentHTML('beforeend', navigationObj.create())
-        navigationObj.setNavigation()
+        navigationObj.setComponent()
         // Added new method that show us a state
         navigationObj.isActive = function() {
             return navigation.classList.contains('_active')
@@ -144,7 +121,7 @@ function render() {
 
         //  Init the burger
         header__inner.insertAdjacentHTML('afterbegin', burgerObj.create())
-        burgerObj.setBurger()
+        burgerObj.setComponent()
         burgerObj.isActive = function() {
             return burger.classList.contains('_active')
         }
@@ -164,7 +141,7 @@ function listenToScroll() {
                   previewHeight = preview.offsetHeight,
                   scrolledFromTop = getBodyScrollTop()
 
-            headerObj.setHeader()
+            headerObj.setComponent()
             
             if (scrolledFromTop > previewHeight) {
                 headerObj.fixate()
